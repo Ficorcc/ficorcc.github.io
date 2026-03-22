@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 		const [locale, ...id] = guide.id.split("/");
 		return {
 			params: {
-				id: id,
+				id: id.join("/"),
 				locale: config.i18n.defaultLocale === locale ? undefined : locale
 			},
 			props: { guide }
