@@ -39,7 +39,9 @@ const config = siteConfig({
 	latest: "*",
 	social: {
 		github: "https://github.com/ficorcc",
-		twitter: "https://twitter.com/ficorpan"
+		twitter: "https://twitter.com/ficorcc",
+		mastodon: "https://mastodon.social/@ficor",
+		email: "mailto:ficor@ficor.cc"
 	}
 });
 

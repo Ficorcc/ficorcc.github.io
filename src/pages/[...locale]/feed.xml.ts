@@ -1,12 +1,4 @@
-// 原配置
-site: "https://thought-lite.ttio.workers.dev",
-
-// 修改后的配置
-site: import.meta.env.PUBLIC_SITE_URL || "http://localhost:4321",// 原配置
-site: "https://thought-lite.ttio.workers.dev",
-
-// 修改后的配置
-site: import.meta.env.PUBLIC_SITE_URL || "http://localhost:4321",import type { APIRoute } from "astro";
+import type { APIRoute } from "astro";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { getCollection, render } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";

@@ -131,16 +131,16 @@ const policy = await getEntry("information", `${localePrefix}policy`);
 		}
 		{
 			social && (
-				<>
-					<span>·</span>
-					<div class="flex items-center gap-1">
-						{social.github && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="simple-icons--github" /></a>}
-						{social.twitter && <a href={social.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Icon name="simple-icons--twitter" /></a>}
-						{social.linkedin && <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="simple-icons--linkedin" /></a>}
-						{social.instagram && <a href={social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Icon name="simple-icons--instagram" /></a>}
-					</div>
-				</>
-			)
+					<>
+						<span>·</span>
+						<div class="flex items-center gap-1">
+							{social.github && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="simple-icons--github" /></a>}
+							{social.twitter && <a href={social.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Icon name="simple-icons--twitter" /></a>}
+							{social.mastodon && <a href={social.mastodon} target="_blank" rel="noopener noreferrer" aria-label="Mastodon"><Icon name="simple-icons--mastodon" /></a>}
+							{social.email && <a href={social.email} target="_blank" rel="noopener noreferrer" aria-label="Email"><Icon name="lucide--mail" /></a>}
+						</div>
+					</>
+				)
 		}
 	</div>
 	<code class="flex items-center gap-2.5">
