@@ -7,7 +7,12 @@ import Icon from "$components/Icon.svelte";
 import Pagination from "$components/Pagination.svelte";
 import i18nit from "$i18n";
 
-let { locale, notes, series: seriesList, tags: tagList }: { locale: string; notes: any[]; series: string[]; tags: string[] } = $props();
+let {
+	locale,
+	notes = [],
+	series: seriesList = [],
+	tags: tagList = []
+}: { locale: string; notes?: any[]; series?: string[]; tags?: string[] } = $props();
 
 const t = i18nit(locale);
 
