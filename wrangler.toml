@@ -18,9 +18,9 @@ id = "45cd888f9e1d434e9031c09f48cd7b09"
 preview_id = "45cd888f9e1d434e9031c09f48cd7b09"
 
 [[d1_databases]]
-binding = "DB"
-database_name = "astro-theme-thought-lite"
-database_id = "5a91394a-d489-421d-8f31-b963b53f1b63"
+binding = "Lawpan"
+database_name = "Lawpan"
+database_id = "1c9c505d-d4d2-4b15-9eeb-3c353fb66371"
 migrations_dir = "drizzle"
 
 [[ratelimits]]

@@ -76,7 +76,7 @@ const { Content, headings } = await render(guide);
 		<aside class="flex flex-col gap-5 lg:w-72 lg:sticky lg:top-5 lg:self-start">
 			<nav class="hidden lg:block">
 				<h2 class="text-sm font-medium mb-2">{t("article.toc")}</h2>
-				<TOC {headings} />
+				<TOC {headings} {locale} />
 			</nav>
 		</aside>
 	</main>

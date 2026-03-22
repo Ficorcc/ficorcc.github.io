@@ -2,6 +2,7 @@
 import type { MarkdownHeading } from "astro";
 import Icon from "$components/Icon.svelte";
 import i18nit from "$i18n";
+import config from "$config";
 
 interface Props {
 	locale: string;
@@ -9,7 +10,7 @@ interface Props {
 	series?: { title: string; url: string; current: boolean }[];
 }
 
-const { locale, headings, series } = Astro.props;
+const { locale = config.i18n.defaultLocale, headings, series } = Astro.props;
 
 const t = i18nit(locale);
 
