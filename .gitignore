@@ -24,12 +24,6 @@ yarn.lock
 # TODO files
 todo*
 
-# environment variables
-.env
-.env.*
-!.env.example
-wrangler.toml
-
 # macOS-specific files
 .DS_Store
 

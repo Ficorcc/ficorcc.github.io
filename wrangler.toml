@@ -1,0 +1,34 @@
+name = "lawpan"
+main = "./dist/_worker.js/index.js"
+compatibility_date = "2025-02-04"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+html_handling = "drop-trailing-slash"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "SESSION"
+# 本地开发时用 fake ID 即可，部署时替换为真实的 Cloudflare KV 命名空间 ID
+id = "45cd888f9e1d434e9031c09f48cd7b09"
+preview_id = "45cd888f9e1d434e9031c09f48cd7b09"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "astro-theme-thought-lite"
+database_id = "5a91394a-d489-421d-8f31-b963b53f1b63"
+migrations_dir = "drizzle"
+
+[[ratelimits]]
+name = "COMMENT_LIMIT"
+namespace_id = "0001"
+simple = { limit = 2, period = 10 }
+
+[[ratelimits]]
+name = "EMAIL_LIMIT"
+namespace_id = "0002"
+simple = { limit = 1, period = 60 }
