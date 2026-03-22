@@ -1,0 +1,152 @@
+---
+import { render, getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import config, { monolocale } from "$config";
+import Time from "$utils/time";
+import Base from "$layouts/Base.astro";
+import Heatmap from "$components/Heatmap.astro";
+import Logo from "$icons/site-logo.svg";
+import i18nit from "$i18n";
+
+export async function getStaticPaths() {
+	// Create path for each locale, omitting default locale from URL
+	return config.i18n.locales.map(locale => ({ params: { locale: config.i18n.defaultLocale === locale ? undefined : locale } }));
+}
+
+const { locale = config.i18n.defaultLocale } = Astro.params;
+
+const t = i18nit(locale);
+
+// Get preface content for current locale, sorted by timestamp (latest first)
+const prefaces = (
+	await getCollection("preface", preface => {
+		// Handle single locale setup
+		if (monolocale) return true;
+
+		// Extract language and ID from file path structure
+		const parts = preface.id.split("/");
+		if (parts.length < 2) return false;
+		
+		const [language, id] = parts;
+		preface.id = id;
+
+		// Filter by current locale
+		return language === locale;
+	})
+).sort((a, b) => b.data.timestamp.getTime() - a.data.timestamp.getTime());
+
+// Get published notes for current locale
+const notes = await getCollection("note", note => {
+	// Assign type property
+	Reflect.set(note, "type", "note");
+
+	// Filter by publication status and locale
+	let published = !note.data.draft;
+	let localed = monolocale || note.id.split("/")[0] === locale;
+
+	// Filter published notes by current locale
+	return published && localed;
+});
+
+// Get published jottings for current locale
+const jottings = await getCollection("jotting", jotting => {
+	// Assign type property
+	Reflect.set(jotting, "type", "jotting");
+
+	// Check monolocale setup or extract language to match locale
+	let localed = monolocale || jotting.id.split("/")[0] === locale;
+
+	// Filter published notes by current locale
+	return !jotting.data.draft && localed;
+});
+
+// Combine contents
+let items: { id: string; type?: string; data: { timestamp: Date; tags?: string[]; [key: string]: any } }[] = [];
+
+// Determine which sections to include
+const sections = config.latest || "*";
+
+// Add contents based on config
+if (sections === "*" || sections.includes("note")) items = items.concat(notes);
+if (sections === "*" || sections.includes("jotting")) items = items.concat(jottings);
+
+// Get the latest content for display
+const sortedItems = items.sort((a, b) => b.data.timestamp.getTime() - a.data.timestamp.getTime());
+const latestItems = sortedItems.slice(0, 3);
+const latest = sortedItems.length > 0 ? sortedItems[0] : null;
+
+// Get the latest preface for display
+const preface = prefaces[0];
+// Render preface content if available, otherwise use empty object
+let Content = null;
+if (preface) {
+	try {
+		const rendered = await render(preface);
+		Content = rendered.Content;
+	} catch (error) {
+		console.error('Error rendering preface:', error);
+	}
+}
+---
+
+<Base title={t("navigation.home")} {locale}>
+	<main class="flex flex-col gap-5 sm:gap-20 grow">
+		<header class="flex items-center justify-center flex-wrap-reverse grow-[0.6]">
+			{config.prologue && <article class="me-auto font-cursive font-thin text-xl sm:text-2xl leading-loose whitespace-pre-line">{config.prologue}</article>}
+			<Logo width={100} />
+		</header>
+
+		{
+			preface && (
+				<section class="flex flex-col">
+					<article class="markdown">
+						<Content />
+					</article>
+					<a href={getRelativeLocaleUrl(locale, "/preface")} class="self-end my-2 text-sm text-secondary">
+						—— {Time.toLocaleDateString(preface.data.timestamp, locale)}
+					</a>
+				</section>
+			)
+		}
+
+		{
+			latestItems.length > 0 && (
+				<footer class="flex items-center justify-center flex-wrap-reverse gap-10">
+					<blockquote class="grow flex flex-col">
+						<h4>{t("home.latest")}</h4>
+						<div class="flex flex-col gap-4 mt-1">
+							{latestItems.map((item, index) => (
+								<div class="flex flex-col gap-1">
+									<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+										<div class="flex items-center gap-2">
+											{item.data.series && (
+												<a href={`${getRelativeLocaleUrl(locale, `/${item.type}`)}?series=${encodeURIComponent(item.data.series)}`} class="link">
+													{item.data.series}
+												</a>
+											)}
+											{item.data.series && <span>|</span>}
+											<a href={getRelativeLocaleUrl(locale, `/${item.type}/${monolocale ? item.id : item.id.split("/").slice(1).join("/")}`)} class="link">
+												{item.data.title}
+											</a>
+										</div>
+										<div class="flex gap-1">
+											{item.data.tags?.map(tag => (
+												<a href={`${getRelativeLocaleUrl(locale, `/${item.type}`)}?tag=${encodeURIComponent(tag)}`} class="text-remark text-sm link">
+													#{tag}
+												</a>
+											))}
+										</div>
+									</div>
+									<time datetime={item.data.timestamp.toISOString()} class="text-remark font-mono text-xs">
+										{Time.toString(item.data.timestamp)}
+									</time>
+								</div>
+							))}
+						</div>
+					</blockquote>
+					<Heatmap {locale} {notes} {jottings} />
+				</footer>
+			)
+		}
+	</main>
+</Base>
