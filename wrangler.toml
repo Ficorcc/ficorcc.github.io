@@ -12,10 +12,10 @@ html_handling = "drop-trailing-slash"
 enabled = true
 
 [[kv_namespaces]]
-binding = "SESSION"
+binding = "Lawpan"
 # 本地开发时用 fake ID 即可，部署时替换为真实的 Cloudflare KV 命名空间 ID
-id = "45cd888f9e1d434e9031c09f48cd7b09"
-preview_id = "45cd888f9e1d434e9031c09f48cd7b09"
+id = "afeedaee9ce142c0bfee45d2ae00f47b"
+preview_id = "afeedaee9ce142c0bfee45d2ae00f47b"
 
 [[d1_databases]]
 binding = "Lawpan"
